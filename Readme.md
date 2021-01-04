@@ -15,6 +15,15 @@ This repository contains terraform code and associated scripts to create k8s clu
 * Service and POD IO CIDR's
 * Network plugin - calico and weavenet
 
+## Preprequisite
+
+I have tested it on Ubuntu18 desktop, if anybody tests it on windows lset me know. I will update
+
+Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
+<pre>
+gcloud compute instances list
+</pre>
+
 ## Usage
 
 Create cluster without gvisor
@@ -26,10 +35,23 @@ terraform apply -auto-approve
 ## Customize deployment with variables
 
 You can choose the flags and values based on definition in "variables.tf" file.
-Default values can be defined in terraform.tfvars.
 <pre>
 terraform init
 terraform   apply  -var="gvisor=y" -var="num_of_workers=2" -var="cni_provider=calico" -auto-approve
+</pre>
+
+## Providing inputs via file
+
+You can create file terraform.tfvars, place it in root directory, and provide values in it, like below
+<pre>
+gcp_project="yourproject"
+ngvisor="y"
+num_of_workers=2
+cni_provider="calico"
+</pre>
+you can then run terraform command as below
+<pre>
+terraform apply -auto-approve
 </pre>
 
 ## Deleting the resources
