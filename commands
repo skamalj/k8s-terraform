@@ -1,0 +1,75 @@
+# Get kubeconfig
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+sudo usermod -aG docker $USER
+
+sudo kubeadm  token create --print-join-command
+
+kubectl taint nodes --all node-role.kubernetes.io/master-
+
+https://ingress-nginx-controller-admission.ingress-nginx.svc:443/networking/v1beta1/ingresses?timeout=10s
+
+kubectl rollout restart deployment coredns -n kube-system 
+
+==CKS=====
+
+# Install NGINX Ingress
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.40.2/deploy/static/provider/baremetal/deploy.yaml
+
+# K8s Ingress Docs
+https://kubernetes.io/docs/concepts/services-networking/ingress
+
+
+===Test=====
+kubectl delete deployment nginx
+kubectl delete svc nginx 
+kubectl create deployment nginx --image nginx 
+kubectl expose deployment nginx --port 80
+kubectl run busybox --rm -it --image busybox -- /bin/sh
+sleep 5
+echo "Below command should say - remote file exists --"
+wget --spider --timeout=1 nginx
+exit
+============
+apt-get install -y etcd-client
+=================Create User ========================
+openssl genrsa -out jane.key 2048
+openssl req -new -key jane.key -out jane.csr # only set Common Name = jane
+
+
+# create CertificateSigningRequest with base64 jane.csr
+https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests
+cat jane.csr | base64 -w 0
+
+
+# add new KUBECONFIG
+k config set-credentials jane --client-key=jane.key --client-certificate=jane.crt
+k config set-context jane --cluster=kubernetes --user=jane
+k config view
+k config get-contexts
+k config use-context jane
+============================
+
+docker run ghcr.io/aquasecurity/trivy:latest image nginx:latest
+
+apiVersion: node.k8s.io/v1beta1
+kind: RuntimeClass
+metadata:
+  name: gvisor
+handler: runsc 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: nginx
+  name: nginx
+spec:
+nodeSelector:
+  runtimeClassName: gvisor
+    naodetype: gvisor
+  containers:
+  - image: nginx
+    name: nginx
