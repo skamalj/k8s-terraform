@@ -1,1 +1,1 @@
-gcp_project="yourproject"
+gcp_project="gcdeveloper"

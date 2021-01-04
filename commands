@@ -22,7 +22,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 https://kubernetes.io/docs/concepts/services-networking/ingress
 
 
-===Test=====
+===Test Deployment =====
 kubectl delete deployment nginx
 kubectl delete svc nginx 
 kubectl create deployment nginx --image nginx 
@@ -32,17 +32,15 @@ sleep 5
 echo "Below command should say - remote file exists --"
 wget --spider --timeout=1 nginx
 exit
+
 ============
 apt-get install -y etcd-client
 =================Create User ========================
 openssl genrsa -out jane.key 2048
 openssl req -new -key jane.key -out jane.csr # only set Common Name = jane
-
-
 # create CertificateSigningRequest with base64 jane.csr
 https://kubernetes.io/docs/reference/access-authn-authz/certificate-signing-requests
 cat jane.csr | base64 -w 0
-
 
 # add new KUBECONFIG
 k config set-credentials jane --client-key=jane.key --client-certificate=jane.crt
@@ -54,12 +52,16 @@ k config use-context jane
 
 docker run ghcr.io/aquasecurity/trivy:latest image nginx:latest
 
+## Verify gvisor deployment ######
+
+kubectl label nodes k8s-gvisor nodetype=gvieor
+
 apiVersion: node.k8s.io/v1beta1
 kind: RuntimeClass
 metadata:
   name: gvisor
 handler: runsc 
-
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -67,9 +69,10 @@ metadata:
     run: nginx
   name: nginx
 spec:
-nodeSelector:
+  nodeSelector:
+    nodetype: gvisor
   runtimeClassName: gvisor
-    naodetype: gvisor
   containers:
   - image: nginx
     name: nginx
+#########    
