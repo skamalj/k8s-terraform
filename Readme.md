@@ -4,6 +4,7 @@ This repository contains terraform code and associated scripts to create k8s clu
 
 * VPC Network
 * Associated Subnet
+* Firewall
 * Master Node
 * "N" number of worker nodes
 * "gvisor" based worked node
@@ -12,12 +13,12 @@ This repository contains terraform code and associated scripts to create k8s clu
 
 * GCP Project name
 * Cloud region for cluster creation
-* Service and POD IO CIDR's
+* Service and POD CIDR's
 * Network plugin - calico and weavenet
 
 ## Preprequisite
 
-I have tested it on Ubuntu18 desktop, if anybody tests it on windows lset me know. I will update
+I have tested it on Ubuntu18 desktop, if anybody tests it on windows let me know. I will update
 
 Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
 <pre>
@@ -56,7 +57,7 @@ terraform apply -auto-approve
 
 ## Deleting the resources
 
-Instead of apply use destry command like below
+Instead of apply use destroy command like below
 <pre>
 terraform destroy  -auto-approve
 terraform destroy  -var="gvisor=y" -var="num_of_workers=2" -var="cni_provider=calico" -auto-approve
@@ -66,7 +67,7 @@ terraform destroy  -var="gvisor=y" -var="num_of_workers=2" -var="cni_provider=ca
 
 ### Adding nodes after initial creation
 
-Below command will add 2 extra node after you have created initial cluster
+Below command will add 2 extra nodes after you have created initial cluster
 <pre>
 terraform apply -var="num_of_workers=3" -auto-approve
 </pre>
