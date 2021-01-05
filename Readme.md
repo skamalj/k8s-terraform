@@ -32,6 +32,18 @@ Create cluster without gvisor
 terraform init
 terraform apply -auto-approve
 </pre>
+Then login to master and wait for install to finish (takes about 1-2 mins). Last of the the log will sate deployment completed.
+<pre>
+gcloud compute ssh k8s-master
+cat /var/log/kubeadm-init.log
+</pre>
+Copy kubeadm join command from the log and execute it on worker nodes (and gvisor node if created)
+
+On worker node (remeber sudo) 
+<pre>
+sudo kubeadm join 10.1.0.4:6443 --token xxxxxxxxxxxxxxxxxx \
+    --discovery-token-ca-cert-hash yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+</pre>
 
 ## Customize deployment with variables
 
