@@ -54,7 +54,7 @@ docker run ghcr.io/aquasecurity/trivy:latest image nginx:latest
 
 ## Verify gvisor deployment ######
 
-kubectl label nodes k8s-gvisor nodetype=gvieor
+kubectl label nodes k8s-gvisor nodetype=gvisor
 
 apiVersion: node.k8s.io/v1beta1
 kind: RuntimeClass

@@ -47,3 +47,15 @@ apt-mark hold kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet
 # Start and enable falco
 systemctl enable falco && systemctl start falco
+
+# install trivy
+sudo apt-get install wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt-get update
+sudo apt-get install trivy
+
+# Install kube-bench
+curl -L https://github.com/aquasecurity/kube-bench/releases/download/v0.3.1/kube-bench_0.3.1_linux_amd64.deb -o kube-bench_0.3.1_linux_amd64.deb
+sudo apt install ./kube-bench_0.3.1_linux_amd64.deb -f
+
