@@ -10,14 +10,15 @@ This repository contains terraform code and associated scripts to create k8s clu
 * "gvisor" based worked node
 * Create any cluster version supported on Ubuntu18 (OS is still hardcoded)
 
-## Follwing variables can be passed
+## Following variables can be passed
 
 * GCP Project name
 * Cloud region for cluster creation
 * Service and POD CIDR's
 * Network plugin - calico and weavenet
+* kubernetes version
 
-## Preprequisite
+## Pre-requisite
 
 > I have tested it on Ubuntu18 desktop, if anybody tests it on windows let me know. I will update
 > Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
@@ -71,7 +72,7 @@ terraform apply -var="k8s_version=1.18.3" -auto-approve
 
 <pre>
 gcp_project="yourproject"
-ngvisor="y"
+gvisor="y"
 num_of_workers=2
 cni_provider="calico"
 </pre>
