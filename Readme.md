@@ -33,7 +33,7 @@ gcloud compute instances list
 
 <pre>
 terraform init
-terraform apply -auto-approve
+terraform apply -var="gcp_project=<yourprojectid>" -auto-approve
 </pre>
 
 > Then login to master and wait for install to finish (takes about 1-2 mins). Last of the the log will state deployment completed.
