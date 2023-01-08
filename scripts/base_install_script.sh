@@ -73,15 +73,21 @@ systemctl restart containerd
 systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker
+
 # Install kubelet kubeadm etcdctl and kubectl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update -y
-apt-get install -y kubelet=${version}-00 kubeadm=${version}-00 kubectl=${version}-00 etcd-client
+apt-get install -y kubelet=${version}-00 kubeadm=${version}-00 kubectl=${version}-00 etcd-client podman
 apt-mark hold kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet
+
+#Install Crictl
+curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/v${cri_version}/crictl-v${cri_version}-linux-amd64.tar.gz --output crictl-v${cri_version}-linux-amd64.tar.gz
+sudo tar zxvf crictl-v${cri_version}-linux-amd64.tar.gz -C /usr/local/bin
+rm -f crictl-v${cri_version}-linux-amd64.tar.gz
 
 # install trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release

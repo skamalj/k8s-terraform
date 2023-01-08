@@ -1,4 +1,4 @@
-# Terraform template to create k8s cluster on GCP
+# Terraform template to create k8s cluster on GCP as per CKS course killer.sh
 
 This repository contains terraform code and associated scripts to create k8s cluster on GCP.  It creates following resources:-
 

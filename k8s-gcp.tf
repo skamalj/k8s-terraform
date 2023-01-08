@@ -29,8 +29,10 @@ locals {
         version = var.k8s_version,
         cni_provider = local.cni_provider})
 
+  cri_version = join(".",slice(split(".",var.k8s_version),0,2))
+
   base_install_script = templatefile("${path.module}/scripts/base_install_script.sh", 
-    { version = var.k8s_version })   
+    { version = var.k8s_version, cri_version = local.cri_version })   
 
   gvisor_install_script = templatefile("${path.module}/scripts/gvisor_install.sh",
     { version = var.k8s_version })
@@ -103,7 +105,7 @@ resource "google_compute_instance" "k8s-vms" {
 
     boot_disk {
         initialize_params {
-            image = "ubuntu-os-cloud/ubuntu-minimal-2004-lts"
+            image = "ubuntu-os-cloud/ubuntu-2204-lts"
             size = 50
         }
   }
