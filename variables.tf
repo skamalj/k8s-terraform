@@ -24,7 +24,7 @@ variable "service_cidr" {
 
 variable "k8s_version" {
   type = string
-  default = "1.19.6"
+  default = "1.25.4"
   description = <<EOF
   Kubernetes version to use, be careful changing it, 
   as other softwares like docker / containerd etc are using hardcoded Versions

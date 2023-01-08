@@ -10,16 +10,13 @@ add-apt-repository \
 "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
 $(lsb_release -cs) \
 stable"
-# Add key for Falco
-curl -s https://falco.org/repo/falcosecurity-3672BA8F.asc | apt-key add -
-echo "deb https://dl.bintray.com/falcosecurity/deb stable main" | tee -a /etc/apt/sources.list.d/falcosecurity.list
 
 # Install Docker CE
 apt-get update && sudo apt-get install -y \
 linux-headers-$(uname -r) \
-containerd.io=1.2.13-2 \
-docker-ce=5:19.03.11~3-0~ubuntu-$(lsb_release -cs) \
-docker-ce-cli=5:19.03.11~3-0~ubuntu-$(lsb_release -cs)
+containerd.io \
+docker-ce \
+docker-ce-cli
 cat <<EOF | sudo tee /etc/docker/daemon.json
 {
     "exec-opts": ["native.cgroupdriver=systemd"],
@@ -32,21 +29,59 @@ cat <<EOF | sudo tee /etc/docker/daemon.json
 EOF
 # Create /etc/systemd/system/docker.service.d
 mkdir -p /etc/systemd/system/docker.service.d
+
+#Start Containerd
+### Containerd config
+cat > /etc/containerd/config.toml <<EOF
+disabled_plugins = []
+imports = []
+oom_score = 0
+plugin_dir = ""
+required_plugins = []
+root = "/var/lib/containerd"
+state = "/run/containerd"
+version = 2
+
+[plugins]
+
+  [plugins."io.containerd.grpc.v1.cri".containerd.runtimes]
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc]
+      base_runtime_spec = ""
+      container_annotations = []
+      pod_annotations = []
+      privileged_without_host_devices = false
+      runtime_engine = ""
+      runtime_root = ""
+      runtime_type = "io.containerd.runc.v2"
+
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+        BinaryName = ""
+        CriuImagePath = ""
+        CriuPath = ""
+        CriuWorkPath = ""
+        IoGid = 0
+        IoUid = 0
+        NoNewKeyring = false
+        NoPivotRoot = false
+        Root = ""
+        ShimCgroup = ""
+        SystemdCgroup = true
+EOF
+systemctl enable containerd
+systemctl restart containerd
 # Restart Docker
 systemctl daemon-reload
 systemctl restart docker
 systemctl enable docker
-# Install kubelet kubeadm falco etcdctl and kubectl
+# Install kubelet kubeadm etcdctl and kubectl
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
 deb https://apt.kubernetes.io/ kubernetes-xenial main
 EOF
 apt-get update -y
-apt-get install -y kubelet=${version}-00 kubeadm=${version}-00 kubectl=${version}-00 etcd-client falco
+apt-get install -y kubelet=${version}-00 kubeadm=${version}-00 kubectl=${version}-00 etcd-client
 apt-mark hold kubelet kubeadm kubectl
 systemctl enable kubelet && systemctl start kubelet
-# Start and enable falco
-systemctl enable falco && systemctl start falco
 
 # install trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release

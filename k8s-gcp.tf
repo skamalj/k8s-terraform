@@ -103,7 +103,7 @@ resource "google_compute_instance" "k8s-vms" {
 
     boot_disk {
         initialize_params {
-            image = "ubuntu-os-cloud/ubuntu-minimal-1804-lts"
+            image = "ubuntu-os-cloud/ubuntu-minimal-2004-lts"
             size = 50
         }
   }
