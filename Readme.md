@@ -20,7 +20,7 @@ This repository contains terraform code and associated scripts to create k8s clu
 
 ## Pre-requisite
 
-> I have tested it on Ubuntu18 desktop, if anybody tests it on windows let me know. I will update
+> I have tested it on Ubuntu22 desktop, if anybody tests it on windows let me know. I will update
 > Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
 
 <pre>
