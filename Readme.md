@@ -123,11 +123,9 @@ terraform apply -var="gvisor=y" -auto-approve
 <pre>
 terraform apply -var="gvisor=N" -auto-approve
 </pre>
-<<<<<<< HEAD
 
 ### Troubleshoot:  DNS lookup not working from pods
 Restart coredns pods
 
 `kubectl -n kube-system rollout restart deployment coredns`
 =======
->>>>>>> 28d0c807dbaed1ba8359cfe8bd5780eed2387179
