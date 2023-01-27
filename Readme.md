@@ -128,4 +128,3 @@ terraform apply -var="gvisor=N" -auto-approve
 Restart coredns pods
 
 `kubectl -n kube-system rollout restart deployment coredns`
-=======
