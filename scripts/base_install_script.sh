@@ -89,6 +89,10 @@ curl -L https://github.com/kubernetes-sigs/cri-tools/releases/download/v${cri_ve
 sudo tar zxvf crictl-v${cri_version}-linux-amd64.tar.gz -C /usr/local/bin
 rm -f crictl-v${cri_version}-linux-amd64.tar.gz
 
+cat <<EOF | sudo tee /etc/crictl.yaml
+runtime-endpoint: unix:///run/containerd/containerd.sock
+EOF
+
 # install trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release
 wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -

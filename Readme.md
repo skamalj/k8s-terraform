@@ -9,6 +9,8 @@ This repository contains terraform code and associated scripts to create k8s clu
 * "N" number of worker nodes
 * "gvisor" based worked node
 * Create any cluster version supported on Ubuntu18 (OS is still hardcoded)
+* Cluster endpoint is exposed on public IP as well in case you need to work on personal machine. Copy the kubeconfig 
+from master to local and change the serverIP to public IP of master.  This IP is printed by terraform on completion.
 
 ## Following variables can be passed
 
@@ -121,3 +123,8 @@ terraform apply -var="gvisor=y" -auto-approve
 <pre>
 terraform apply -var="gvisor=N" -auto-approve
 </pre>
+
+### Troubleshoot:  DNS lookup not working from pods
+Restart coredns pods
+
+`kubectl -n kube-system rollout restart deployment coredns`

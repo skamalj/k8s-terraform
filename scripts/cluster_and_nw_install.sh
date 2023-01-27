@@ -1,6 +1,6 @@
 # Initialize cluster with master node
-echo "Executing: kubeadm init --kubernetes-version=${version} --pod-network-cidr ${pod_cidr} --service-cidr=${service_cidr}"  >> /var/log/kubeadm-init.log
-kubeadm init --kubernetes-version=${version} --pod-network-cidr ${pod_cidr} --service-cidr=${service_cidr} >> /var/log/kubeadm-init.log 2>&1
+echo "Executing: kubeadm init --apiserver-advertise-address=0.0.0.0 --apiserver-cert-extra-sans=${cluster_endpoint} --kubernetes-version=${version} --pod-network-cidr ${pod_cidr} --service-cidr=${service_cidr}"  >> /var/log/kubeadm-init.log
+kubeadm init --apiserver-advertise-address=0.0.0.0 --apiserver-cert-extra-sans=${cluster_endpoint} --kubernetes-version=${version} --pod-network-cidr ${pod_cidr} --service-cidr=${service_cidr} >> /var/log/kubeadm-init.log 2>&1
 # Deploy kube network
 echo  "Executing: KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f ${cni_provider}"
 KUBECONFIG=/etc/kubernetes/admin.conf kubectl apply -f ${cni_provider}  >> /var/log/kubeadm-init.log  2>&1

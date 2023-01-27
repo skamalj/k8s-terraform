@@ -27,7 +27,8 @@ locals {
       { pod_cidr = var.pod_cidr, 
         service_cidr = var.service_cidr, 
         version = var.k8s_version,
-        cni_provider = local.cni_provider})
+        cni_provider = local.cni_provider,
+        cluster_endpoint = google_compute_address.cluster-ep.address})
 
   cri_version = join(".",slice(split(".",var.k8s_version),0,2))
 
@@ -67,7 +68,7 @@ resource "google_compute_firewall" "k8s-vnet-fw-external" {
     network = google_compute_network.k8s-vnet-tf.id
     allow {
       protocol = "tcp"
-      ports = ["22","80","443", "30000-40000"]
+      ports = ["22","80","443","53","6443","30000-40000"]
     }
 
     allow {
@@ -95,6 +96,11 @@ resource "google_compute_firewall" "k8s-vnet-fw-internal" {
     source_tags = [ "k8s" ] 
 }
 
+resource "google_compute_address"  "cluster-ep" {
+  name = "cluster-endpoint"
+  address_type = "EXTERNAL"
+}
+
 resource "google_compute_instance" "k8s-vms" {
     for_each = local.k8s_vms
     name = join("-",["k8s", each.key])
@@ -114,7 +120,7 @@ resource "google_compute_instance" "k8s-vms" {
     network = google_compute_network.k8s-vnet-tf.id
     subnetwork = google_compute_subnetwork.subnet-10-1.id
     access_config {
-      // Allocate epheneral IP
+      nat_ip = each.key == "master" ? google_compute_address.cluster-ep.address : null
     }
   }
 
