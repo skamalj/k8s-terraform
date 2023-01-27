@@ -8,7 +8,7 @@ This repository contains terraform code and associated scripts to create k8s clu
 * Master Node
 * "N" number of worker nodes
 * "gvisor" based worked node
-* Create any cluster version supported on Ubuntu18 (OS is still hardcoded)
+* Create any cluster version supported on Ubuntu22 (OS is still hardcoded)
 * Cluster endpoint is exposed on public IP as well in case you need to work on personal machine. Copy the kubeconfig 
 from master to local and change the serverIP to public IP of master.  This IP is printed by terraform on completion.
 
@@ -22,8 +22,10 @@ from master to local and change the serverIP to public IP of master.  This IP is
 
 ## Pre-requisite
 
-> I have tested it on Ubuntu22 desktop, if anybody tests it on windows let me know. I will update
-> Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
+> I have tested this terraform code on Ubuntu22 desktop, if anybody tests it on windows let me know, I will update.
+
+
+> Log in to your GCP account, whichever account below comand is using will be used by the terraform (projects can be different)
 
 <pre>
 gcloud compute instances list
