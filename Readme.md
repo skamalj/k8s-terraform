@@ -22,7 +22,7 @@ from master to local and change the serverIP to public IP of master.  This IP is
 
 ## Pre-requisite
 
-> I have tested it on Ubuntu18 desktop, if anybody tests it on windows let me know. I will update
+> I have tested it on Ubuntu22 desktop, if anybody tests it on windows let me know. I will update
 > Have a GCP account and log in to it. Whichever account below comand is using will be used by the terraform (projects can be different)
 
 <pre>
@@ -123,8 +123,11 @@ terraform apply -var="gvisor=y" -auto-approve
 <pre>
 terraform apply -var="gvisor=N" -auto-approve
 </pre>
+<<<<<<< HEAD
 
 ### Troubleshoot:  DNS lookup not working from pods
 Restart coredns pods
 
 `kubectl -n kube-system rollout restart deployment coredns`
+=======
+>>>>>>> 28d0c807dbaed1ba8359cfe8bd5780eed2387179
